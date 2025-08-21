@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
@@ -9,7 +8,6 @@ import { UpdateCouponDto } from './dto/update-coupon.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Coupon } from './entities/coupon.entity';
 import { Repository } from 'typeorm';
-import { ApplyCouponDto } from './dto/apply-coupon.dto';
 import { endOfDay, isAfter } from 'date-fns';
 
 @Injectable()
@@ -20,7 +18,11 @@ export class CouponsService {
   ) {}
 
   async create(createCouponDto: CreateCouponDto) {
-    return await this.couponRepository.save(createCouponDto);
+    await this.couponRepository.save(createCouponDto);
+    return {
+      message: `Cupón ${createCouponDto.name} creado correctamente`,
+      coupon: createCouponDto,
+    };
   }
 
   async findAll() {
